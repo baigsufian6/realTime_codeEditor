@@ -1,12 +1,21 @@
-import ACTIONS from './src/Actions.js';
 import express from 'express';
 import path from 'path';
 import { Server } from 'socket.io';
 import http from 'http';
+import ACTIONS from './src/Actions.js';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+
+// Serve static files from the 'build' directory
+const staticPath = path.resolve('build');
+app.use(express.static(staticPath));
+
+// Route all other requests to index.html
+app.use((req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
 
 const userSocketMap = {};
 
