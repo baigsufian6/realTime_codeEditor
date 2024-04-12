@@ -1,20 +1,14 @@
-const ACTIONS = require('./src/Actions');
-const express = require('express');
-const path = require('path');
+import ACTIONS from './src/Actions.js';
+import express from 'express';
+import path from 'path';
+import { Server } from 'socket.io';
+import http from 'http';
+
 const app = express();
-const { Server } = require('socket.io');
-const http = require('http');
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static('build'))
-app.use((req, res, next)=> {
-res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
-
 const userSocketMap = {};
-
-
 
 function getAllConnectedClients(roomID) {
   return Array.from(io.sockets.adapter.rooms.get(roomID) || []).map((socketId) => {

@@ -1,4 +1,3 @@
-
 const ACTIONS = {
     JOIN : 'join',
     JOINED : 'joined',
@@ -8,4 +7,4 @@ const ACTIONS = {
     LEAVE :  'leave'
 }
 
-module.exports = ACTIONS
+export default ACTIONS;

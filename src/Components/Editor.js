@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from 'react'
-import Codemirror from 'codemirror'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/javascript/javascript'
-import 'codemirror/theme/darcula.css'
-import 'codemirror/addon/edit/closebrackets'
-import 'codemirror/addon/edit/closetag'
-import ACTIONS from '../Actions'
+import React, { useEffect, useRef } from 'react';
+import Codemirror from 'codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/edit/closetag.js';
+import 'codemirror/theme/darcula.css';
+import ACTIONS from '../Actions.js';
+import 'codemirror/mode/javascript/javascript.js'; 
 
 export default function Editor({ socketRef, roomID, onCodeChange }) {
-
   const EditorRef = useRef(null);
 
   useEffect(() => {
@@ -18,42 +17,39 @@ export default function Editor({ socketRef, roomID, onCodeChange }) {
         theme: 'darcula',
         autoCloseTags: true,
         autoCloseBrackets: true,
-        lineNumbers: true
-      })
+        lineNumbers: true,
+      });
 
       EditorRef.current.on('change', (instance, changes) => {
-        
-        const { origin } = changes
+        const { origin } = changes;
         const code = instance.getValue();
-        onCodeChange(code)
+        onCodeChange(code);
+
         if (origin !== 'setValue') {
           socketRef.current.emit(ACTIONS.CODE_CHANGE, {
             roomID,
             code,
-          })
+          });
         }
-        
-      })
+      });
     }
+
     init();
-  }, [roomID, socketRef])
+  }, [roomID, socketRef]);
 
   useEffect(() => {
     if (socketRef.current) {
       socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
         if (code !== null) {
-          EditorRef.current.setValue(code)
+          EditorRef.current.setValue(code);
         }
-      })
+      });
     }
 
-    return () =>{
+    return () => {
+      socketRef.current.off(ACTIONS.CODE_CHANGE);
+    };
+  }, [socketRef.current]);
 
-      socketRef.current.off(ACTIONS.CODE_CHANGE)
-    }
-  }, [socketRef.current])
-
-  return (
-    <textarea id="realTimeEditor"></textarea>
-  )
+  return <textarea id="realTimeEditor"></textarea>;
 }

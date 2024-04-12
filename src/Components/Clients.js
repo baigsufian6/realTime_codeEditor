@@ -1,14 +1,13 @@
-const React = require('react');
-const Avatar = require('react-avatar').default; 
+import React from 'react';
+import Avatar from 'react-avatar';
 
-function Clients({ username, clientKey }) { // Change key to clientKey
+function Clients({ username, clientKey }) {
   return (
-    React.createElement('div', { className: 'clients', key: clientKey }, // Use clientKey as the key prop
-      React.createElement(Avatar, { name: username, size: 50, round: '14px' }),
-      React.createElement('span', { className: 'username' }, username),
-  
-    )
+    <div className="clients" key={clientKey}>
+      <Avatar name={username} size={50} round="14px" />
+      <span className="username">{username}</span>
+    </div>
   );
 }
 
-module.exports = Clients;
+export default Clients;

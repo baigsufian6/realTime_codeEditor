@@ -1,11 +1,11 @@
 // EditorPages.jsx
 import React, { useState, useRef, useEffect } from "react";
-import Clients from "../Components/Clients";
-import Editor from "../Components/Editor";
+import Clients from "../Components/Clients.js";
+import Editor from "../Components/Editor.js";
 import toast from 'react-hot-toast';
-import { initSocket } from '../Socket';
+import { initSocket } from '../Socket.js';
 import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
-import ACTIONS from "../Actions";
+import ACTIONS from "../Actions.js";
 
 function EditorPages() {
   const socketRef = useRef(null);
@@ -37,7 +37,10 @@ function EditorPages() {
           console.log(`${username} joined the room`);
         }
         setClient(clients);
-        socketRef.current.emit(ACTIONS.SYN_CODE, codeRef.current)
+        socketRef.current.emit(ACTIONS.SYN_CODE, {
+          CODE : codeRef.current,
+          socketId,
+        })
       });
 
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketID, username }) => {
